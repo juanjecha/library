@@ -110,22 +110,23 @@ bootstrap.min.css">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<?php if(session()->getFlashdata('success')): ?>
+<?php if(session()->getFlashdata('success_author')): ?>
 <script>
 Swal.fire({
     icon: 'success',
-    title: 'Success',
-    text: '<?= session()->getFlashdata('success') ?>'
+    title: 'Registro exitoso',
+    text: '<?= session()->getFlashdata('success_author') ?>'
 });
 </script>
 <?php endif; ?>
 
-<?php if(session()->getFlashdata('error')): ?>
+<?php if(session()->getFlashdata('error_author')): ?>
+
 <script>
 Swal.fire({
     icon: 'error',
     title: 'Error',
-    text: '<?= session()->getFlashdata('error') ?>'
+    text: '<?= session()->getFlashdata('error_author') ?>'
 });
 </script>
 <?php endif; ?>

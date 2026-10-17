@@ -13,17 +13,17 @@ class AuthorController extends BaseController
 
     public function new(){ 
         $author = $this->request->getPost();
-        if (!empty($author["name"]) && !empty($author["last_name"])) {
-            $this->bookModel->newAuthor($author);
+        if (empty($author["name"]) || empty($author["last_name"])) {
+            return redirect()->back()->withInput()->with("error_author", "Nombre y apellido son obligatorios");
         }
 
         $operation = $this->bookModel->newAuthor($author);
         if ($operation['status']) {
-            return redirect()->back()->withInput()->with('success', $operation["message"]);
+            return redirect()->back()->withInput()->with('success_author', $operation["message"]);
 
         } else {
             $this->session->setFlashdata('msg_error', $operation['message']);
-            return redirect()->back()->withInput()->with('error', $operation["message"]);
+            return redirect()->back()->withInput()->with('error_author', $operation["message"]);
         }
     }
 }
