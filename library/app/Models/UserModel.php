@@ -32,7 +32,7 @@ class UserModel extends Model {
         if ($this->obtenerPorEmail($datos['email'])) {
             return [
             'status' => false,
-            'message' => 'El correo electronico ya se encuentra registrado.'
+            'message' => 'El autor ya se encuentra registrado.'
             ];
         }
 

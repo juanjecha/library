@@ -1,15 +1,20 @@
 <?php
 
 namespace App\Controllers;
+use App\Models\BookModel;
 
 class Home extends BaseController
 {
+    private $bookModel;
+
+    public function __construct() {
+        $this->bookModel = new BookModel();
+    }
+
     public function index(): string
     {
         return view('main');
     }
 
-    public function open_catalog() {
-        return view("main");
-    }
+   
 }

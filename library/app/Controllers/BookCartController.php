@@ -20,7 +20,7 @@ class BookCartController extends BaseController
             'libros' => $this->bookModel->paginate($perPage),
             'pager' => $this->bookModel->pager,
         ];
-        return view('libreria/catalogo', $data);
+        return view('library/catalog', $data);
     }
 
     /**

@@ -107,7 +107,7 @@ class Auth extends BaseController {
         } else {
             $session->setFlashdata('msg_error', $resultado['message']);
             $session->setFlashdata('open_modal', true);
-            return redirect()->to("/login")->withInput(); // Reabre el modal al fallar
+            return redirect()->to("/login")->withInput(); // Reopen modal after fail
         }
         return redirect()->to('/login');
     }
