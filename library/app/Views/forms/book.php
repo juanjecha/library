@@ -1,6 +1,6 @@
 <div class="card shadow mb-4">
     <div class="card-body">
-        <form action="<?= base_url('save_book') ?>" method="POST">
+        <form action="<?= base_url('save_book') ?>" method="POST" enctype="multipart/form-data">
             <?= csrf_field() ?>
 
             <!-- Portada -->

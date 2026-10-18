@@ -176,6 +176,8 @@ bootstrap.min.css">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+
+<!-- status author -->
 <?php if(session()->getFlashdata('success_author')): ?>
 <script>
 Swal.fire({
@@ -197,6 +199,9 @@ Swal.fire({
 </script>
 <?php endif; ?>
 
+
+
+<!-- status editorial -->
 <?php if(session()->getFlashdata('success_ed')): ?>
 <script>
 Swal.fire({
@@ -217,6 +222,30 @@ Swal.fire({
 });
 </script>
 <?php endif; ?>
+
+
+
+<!-- errors book -->
+<?php if(session()->getFlashdata('success_book')): ?>
+<script>
+Swal.fire({
+    icon: 'success',
+    title: 'Registro exitoso',
+    text: <?= json_encode(session()->getFlashdata('success_book')) ?>
+});
+</script>
+<?php endif; ?>
+
+<?php if(session()->getFlashdata('error_book')): ?>
+<script>
+Swal.fire({
+    icon: 'error',
+    title: 'Error',
+    text: <?= json_encode(session()->getFlashdata('error_book')) ?>
+});
+</script>
+<?php endif; ?>
+
 
 
 <script>
