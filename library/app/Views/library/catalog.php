@@ -2,7 +2,6 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Librería Universitaria - Catálogo Paginado</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/
 bootstrap.min.css">
 <link rel=""stylesheet href="<?= base_url("css/books.css") ?>">
@@ -12,6 +11,14 @@ bootstrap.min.css">
     <header class="bg-dark text-white py-3 mb-4 shadow-sm">
         <div class="container d-flex justify-content-between align-items-center">
             <h1 class="h3 mb-0">Librería Juanito</h1>
+            
+            <a href="#" 
+                class="btn btn-primary" 
+                data-bs-toggle="modal" 
+                data-bs-target="#ModalBook">
+                Libros
+            </a>
+
             <a href="#" 
                 class="btn btn-primary" 
                 data-bs-toggle="modal" 
@@ -51,6 +58,7 @@ bootstrap.min.css">
                     esc($libro['isbn']) ?></span>
 
                     <h2 class="book-title"><?= esc($libro['titulo']) ?></h2>
+                    <p class="text-muted small">Editorial: <?= esc($libro["editorial"]) ?></p>
                     <p class="text-muted small">Autor: <?= esc($libro['autor']) ?></p>
                     <div class="book-price mb-2">$<?= number_format($libro['precio'], 2) ?>
                     MXN</div>
@@ -143,6 +151,26 @@ bootstrap.min.css">
                 </div>
 
 
+
+
+        <!-- nuevo libro -->     
+    <div class="modal fade" id="ModalBook" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                
+                <div class="modal-header">
+                    <h5 class="modal-title" id="miModalLabel">Registro de Libros</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                
+                <div class="modal-body">
+                    <?= view("forms/book") ?>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </body>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -169,6 +197,28 @@ Swal.fire({
 </script>
 <?php endif; ?>
 
+<?php if(session()->getFlashdata('success_ed')): ?>
+<script>
+Swal.fire({
+    icon: 'success',
+    title: 'Registro exitoso',
+    text: '<?= session()->getFlashdata('success_ed') ?>'
+});
+</script>
+<?php endif; ?>
+
+<?php if(session()->getFlashdata('error_ed')): ?>
+
+<script>
+Swal.fire({
+    icon: 'error',
+    title: 'Error',
+    text: '<?= session()->getFlashdata('error_ed') ?>'
+});
+</script>
+<?php endif; ?>
+
+
 <script>
     const editUrlBase = "<?= base_url('edit_aut') ?>";
     const authorsModalEl = document.getElementById('ModalAut');
@@ -192,22 +242,20 @@ Swal.fire({
 </script>
 
 <script>
-    const editUrlBase = "<?= base_url('edit_ed') ?>";
-    const EdModalEl = document.getElementById('ModalEd');
+    const editEdUrlBase = "<?= base_url('edit_ed') ?>";
+    const edModalEl = document.getElementById('ModalEd');
     const editEdEl = document.getElementById('editEdModal');
 
-    document.querySelectorAll('.btn-edit-author').forEach(function (btn) {
+    document.querySelectorAll('.btn-edit-editorial').forEach(function (btn) {
         btn.addEventListener('click', function () {
-            // Llenar el formulario de edición
-            document.getElementById('editEdForm').action = editUrlBase + '/' + btn.dataset.id;
-            document.getElementById('edit_name').value = btn.dataset.name;
+            document.getElementById('editEditorialForm').action = editEdUrlBase + '/' + btn.dataset.id;
+            document.getElementById('edit_ed_name').value = btn.dataset.name;
 
-            // Cerrar "editoriales" y, cuando termine de cerrarse, abrir "Editar"
-            EdModalEl.addEventListener('hidden.bs.modal', function () {
+            edModalEl.addEventListener('hidden.bs.modal', function () {
                 bootstrap.Modal.getOrCreateInstance(editEdEl).show();
             }, { once: true });
 
-            bootstrap.Modal.getInstance(EdModalEl).hide();
+            bootstrap.Modal.getInstance(edModalEl).hide();
         });
     });
 </script>

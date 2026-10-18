@@ -24,6 +24,7 @@ $routes->get('libreria/carrito/vaciar', [BookCartController::class, 'clear']);
 //registros
 $routes->post('save_aut', 'AuthorController::new');
 $routes->post('save_ed', 'EditorialController::new');
+$routes->post('save_book', 'BookController::new');
 
 
 //edits

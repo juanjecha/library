@@ -14,16 +14,16 @@ class EditorialController extends BaseController
     public function new(){ 
         $editorial = $this->request->getPost();
         if (empty($editorial["name"])) {
-            return redirect()->back()->withInput()->with("error_edit", "El nombre es obligatorio");
+            return redirect()->back()->withInput()->with("error_ed", "El nombre es obligatorio");
         }
 
         $operation = $this->editorialModel->newEditorial($editorial);
         if ($operation['status']) {
-            return redirect()->back()->withInput()->with('success_editorial', $operation["message"]);
+            return redirect()->back()->withInput()->with('success_ed', $operation["message"]);
 
         } else {
             $this->session->setFlashdata('msg_error', $operation['message']);
-            return redirect()->back()->withInput()->with('error_author', $operation["message"]);
+            return redirect()->back()->withInput()->with('error_ed', $operation["message"]);
         }
     }
 

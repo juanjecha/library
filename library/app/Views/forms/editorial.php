@@ -60,12 +60,9 @@
                                         <?= esc($editorial['name']) ?>
                                     </span>
                                     <button type="button"
-                                        class="btn btn-sm btn-outline-primary btn-edit-author"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#editAuthorModal"
+                                        class="btn btn-sm btn-outline-primary btn-edit-editorial"
                                         data-id="<?= esc($editorial['id'], 'attr') ?>"
-                                        data-name="<?= esc($editorial['name'], 'attr') ?>"
-                                        >
+                                        data-name="<?= esc($editorial['name'], 'attr') ?>">
                                         <i class="bi bi-pencil-square"></i> Editar
                                     </button>
                                 </li>
