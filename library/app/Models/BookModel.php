@@ -57,36 +57,10 @@ class BookModel extends Model{
         ];
     }
 
-    
-    public function newBook(array $datos): array
-    {
-        // Verificacion de duplicidad
-        if ($this->duplicate_check($datos['title'], $datos["id_editorial"])) {
-            return [
-            'status' => false,
-            'message' => 'Libro ya registrado.'
-            ];
-        }
-
-        // Insercion en base de datos
-        $newBook = [
-            'isbn' => $datos['isbn'],
-            'title' => $datos['title'],
-            'price' => $datos['price'],
-            'stock' => $datos['stock'],
-            'id_editorial' => $datos['id_editorial'],
-            'cover' => $datos['cover']
-        ];
-
-        if ($this->insert($newBook)) {
-            return [
-            'status' => true,
-            'message' => 'Libro registrado exitosamente.'
-            ];
-        }
-        return [
-            'status' => false,
-            'message' => 'Error al intentar guardar.'
-        ];
+    public function getBooks() {
+        $builder = $this->select('book.id, book.isbn, book.title, book.price, book.stock, editorial.name AS editorial, book.cover')
+                        ->join('editorial', 'book.id_editorial = editorial.id', 'inner')
+                        ;
+        return $builder;
     }
 }

@@ -26,7 +26,7 @@ class BookCartController extends BaseController
         $data = [
             'authors' => $this->authorModel->findAll(), 
             'editorials' => $this->editorialModel->findAll(),
-            'libros' => $this->bookModel->paginate($perPage),
+            'libros' => $this->bookModel->getBooks()->paginate($perPage),
             'pager' => $this->bookModel->pager,
         ];
         return view('library/catalog', $data);

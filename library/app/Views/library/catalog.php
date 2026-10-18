@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/
 bootstrap.min.css">
 <link rel=""stylesheet href="<?= base_url("css/books.css") ?>">
+<link rel=""stylesheet href="<?= base_url("css/cover.css") ?>">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
 <body>
@@ -52,15 +53,31 @@ bootstrap.min.css">
 
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-5">
             <?php foreach ($libros as $libro): ?>
+
             <div class="col">
-                <div class="card h-100 book-card shadow-sm p-3">
+                
+                    <div class="card h-100 book-card shadow-sm p-3">
+                        <div class="book-cover-wrap mb-3">
+                            <?php if (! empty($libro['cover'])): ?>
+                                <img src="<?= base_url('uploads/' . esc($libro['cover'], 'url')) ?>"
+                                    alt="Portada de <?= esc($libro['title'] ?? $libro['titulo'], 'attr') ?>"
+                                    class="book-cover"
+                                    loading="lazy">
+                            <?php else: ?>
+                                <div class="book-cover-placeholder">
+                                    <i class="bi bi-book fs-1"></i>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>    
+
                     <span class="badge isbn-badge w-auto me-auto mb-2">ISBN: <?=
                     esc($libro['isbn']) ?></span>
 
-                    <h2 class="book-title"><?= esc($libro['titulo']) ?></h2>
+                    <h2 class="book-title"><?= esc($libro['title']) ?></h2>
                     <p class="text-muted small">Editorial: <?= esc($libro["editorial"]) ?></p>
-                    <p class="text-muted small">Autor: <?= esc($libro['autor']) ?></p>
-                    <div class="book-price mb-2">$<?= number_format($libro['precio'], 2) ?>
+                    
+                    <div class="book-price mb-2">$<?= number_format($libro['price'], 2) ?>
                     MXN</div>
 
                     <form action="<?= site_url('libreria/carrito/agregar') ?>"method="post" class="mt-auto">
