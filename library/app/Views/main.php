@@ -52,10 +52,12 @@ bootstrap.min.css">
 
                     <h2 class="book-title"><?= esc($libro['title']) ?></h2>
                     <p class="text-muted small">Editorial: <?= esc($libro["editorial"]) ?></p>
-                    
+                    <p class="text-muted small">Stock: <?= esc($libro["stock"]) ?></p>
+                    <p class="text-muted small">Autor(es): <?= esc($libro["authors"]) ?></p>
                     <div class="book-price mb-2">$<?= number_format($libro['price'], 2) ?>
                     MXN</div>
                 </div>
+                    
             </div>
             <?php endforeach; ?>
 

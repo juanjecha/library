@@ -31,3 +31,5 @@ $routes->group('', ['filter' => 'adminFilter'], function ($routes) {
     $routes->post('edit_ed/(:num)', 'EditorialController::update/$1');
     $routes->post('edit_book/(:num)', 'BookController::update/$1');
 });
+
+$routes->post('search', 'Home::filt');

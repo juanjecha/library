@@ -41,7 +41,7 @@ bootstrap.min.css">
             
 
             <?php if (session('rol') === 'user'): ?>
-                <a href="<?= site_url('library/carrito') ?>" class="btn btn-primary">
+                <a href="<?= site_url('libreria/carrito') ?>" class="btn btn-primary">
                     Ver Carrito (<?= count(session()->get('libro_carrito') ?? []) ?>)
                 </a>
             <?php endif; ?>
@@ -52,6 +52,31 @@ bootstrap.min.css">
 
         </div>
     </header>
+
+    <!-- Búsqueda personalizada -->
+<form action="<?= base_url('search') ?>" method="get" class="card shadow-sm p-3 mb-4">
+    <div class="row g-2 align-items-end">
+
+        <div class="col-12 col-lg-4">
+            <label for="q" class="form-label small mb-1">Buscar</label>
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                <input type="search" class="form-control" id="q" name="q"
+                    placeholder="Título, ISBN, autor o editorial"
+                    value="<?= esc($filters['q'] ?? '', 'attr') ?>">
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-6 d-flex gap-2 justify-content-lg-end">
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-search"></i> Buscar
+            </button>
+            <a href="<?= site_url('libreria/catalogo') ?>" class="btn btn-outline-secondary">
+                <i class="bi bi-x-circle"></i> Limpiar
+            </a>
+        </div>
+    </div>
+</form>
 
     <main class="container py-2">
         <?php if (session()->getFlashdata('error')): ?>
@@ -80,6 +105,7 @@ bootstrap.min.css">
                 <?php endif; ?>
 
 
+
                 <div class="card h-100 book-card shadow-sm p-3">
                     <div class="book-cover-wrap mb-3">
                         <?php if (! empty($libro['cover'])): ?>
@@ -99,13 +125,13 @@ bootstrap.min.css">
 
                     <h2 class="book-title"><?= esc($libro['title']) ?></h2>
                     <p class="text-muted small">Editorial: <?= esc($libro["editorial"]) ?></p>
-                    
+                    <p class="text-muted small">Autor(es): <?= esc($libro["authors"]) ?></p>
                     <div class="book-price mb-2">$<?= number_format($libro['price'], 2) ?>
                     MXN</div>
 
                     
                 <?php if (session('rol') === 'user'): ?>
-                    <form action="<?= site_url('library/carrito/agregar') ?>"method="post" class="mt-auto">
+                    <form action="<?= site_url('libreria/carrito/agregar') ?>"method="post" class="mt-auto">
                         <?= csrf_field() ?>
                         <input type="hidden" name="id" value="<?= $libro['id'] ?>">
 

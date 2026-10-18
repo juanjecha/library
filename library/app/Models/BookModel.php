@@ -59,11 +59,40 @@ class BookModel extends Model{
 
     public function getBooks() {
     return $this->select(
-            'book.id, book.isbn, book.title, book.price, book.stock, book.cover, book.id_editorial,
-             editorial.name AS editorial,
-             (SELECT GROUP_CONCAT(ba.id_author) FROM book_author ba WHERE ba.book = book.isbn) AS author_ids',
+            "book.id, book.isbn, book.title, book.price, book.stock, book.cover, book.id_editorial, editorial.name AS editorial,
+             (SELECT GROUP_CONCAT(book_author.id_author) FROM book_author WHERE book_author.book = book.isbn) AS author_ids,
+             (SELECT GROUP_CONCAT(CONCAT(author.name, ' ', author.last_name) ORDER BY author.last_name SEPARATOR ', ')
+                FROM book_author
+                INNER JOIN author ON author.id = book_author.id_author
+                WHERE book_author.book = book.isbn) AS authors",
             false
         )
         ->join('editorial', 'book.id_editorial = editorial.id', 'inner');
-}
+    }
+
+    public function filteredBooks($q) {
+
+        $query = "SELECT book.id, book.isbn, book.title, book.price, book.stock, book.cover, book.id_editorial, editorial.name AS editorial,
+                  (SELECT GROUP_CONCAT(CONCAT(author.name, ' ', author.last_name) ORDER BY author.last_name SEPARATOR ', ')
+                    FROM book_author
+                    INNER JOIN author ON author.id = book_author.id_author
+                    WHERE book_author.book = book.isbn) AS authors,
+                  (SELECT GROUP_CONCAT(book_author.id_author)
+                    FROM book_author
+                    WHERE book_author.book = book.isbn) AS author_ids
+                  FROM book
+                  INNER JOIN editorial
+                  ON editorial.id = book.id_editorial
+                  WHERE book.title LIKE :q: OR editorial.name LIKE :q: or EXISTS(
+                                                                        SELECT 1
+                                                                        FROM book_author
+                                                                        INNER JOIN author ON author.id = book_author.id_author
+                                                                        WHERE book_author.book = book.isbn
+                                                                        AND CONCAT(author.name, ' ', author.last_name) LIKE :q:
+                                                                        )
+                  ";
+
+        return $this->query($query, ["q" => "%" . $q . "%"])->getResultArray();
+    }
+
 }

@@ -27,5 +27,23 @@ class Home extends BaseController
             'pager' => $this->bookModel->pager,
         ];
         return view('main',$data);
-    }   
+    }
+
+    public function filt() {
+        $q = trim((string) $this->request->getPost('q'));
+        
+        if ($q !== '') {
+            $libros = $this->bookModel->filteredBooks($q);
+            $pager = null;
+            $data =  ['libros' => $libros, 'pager' => $pager];
+            return view("library/cat_filt");
+
+        } else {
+            $libros = $this->bookModel->getBooks()->paginate(6);
+            $pager = $this->bookModel->pager;
+            $data =  ['libros' => $libros, 'pager' => $pager];
+            return view("library/catalog");
+
+        }
+    }
 }
