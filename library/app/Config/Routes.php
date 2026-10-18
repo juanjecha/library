@@ -20,14 +20,14 @@ $routes->get('libreria/carrito', [BookCartController::class, 'show']);
 $routes->get('libreria/carrito/eliminar/(:segment)', [BookCartController::class, 'remove']);
 $routes->get('libreria/carrito/vaciar', [BookCartController::class, 'clear']);
 
+$routes->group('', ['filter' => 'adminFilter'], function ($routes) {
+    // registros
+    $routes->post('save_aut', 'AuthorController::new');
+    $routes->post('save_ed', 'EditorialController::new');
+    $routes->post('save_book', 'BookController::new');
 
-//registros
-$routes->post('save_aut', 'AuthorController::new');
-$routes->post('save_ed', 'EditorialController::new');
-$routes->post('save_book', 'BookController::new');
-
-
-//edits
-$routes->post('edit_aut/(:num)', 'AuthorController::update/$1');
-$routes->post('edit_ed/(:num)', 'EditorialController::update/$1');
-$routes->post('edit_book/(:num)', 'BookController::update/$1');
+    // edits
+    $routes->post('edit_aut/(:num)', 'AuthorController::update/$1');
+    $routes->post('edit_ed/(:num)', 'EditorialController::update/$1');
+    $routes->post('edit_book/(:num)', 'BookController::update/$1');
+});

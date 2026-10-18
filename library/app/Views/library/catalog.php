@@ -41,7 +41,7 @@ bootstrap.min.css">
             
 
             <?php if (session('rol') === 'user'): ?>
-                <a href="<?= site_url('libreria/carrito') ?>" class="btn btn-primary">
+                <a href="<?= site_url('library/carrito') ?>" class="btn btn-primary">
                     Ver Carrito (<?= count(session()->get('libro_carrito') ?? []) ?>)
                 </a>
             <?php endif; ?>
@@ -54,15 +54,15 @@ bootstrap.min.css">
     </header>
 
     <main class="container py-2">
-        <?php if (session('rol') === 'user'): ?>
-        <div class="alert alert-danger"><?= session()->getFlashdata('error') ?></div>
+        <?php if (session()->getFlashdata('error')): ?>
+            <div class="alert alert-danger"><?= esc(session()->getFlashdata('error')) ?></div>
         <?php endif; ?>
 
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-5">
             <?php foreach ($libros as $libro): ?>
 
             <div class="col">
-                <?php if (session('rol') === 'user'): ?>
+                <?php if (session('rol') === 'admin'): ?>
                 <button type="button"
                     class="btn btn-sm btn-outline-secondary w-100 mt-2"
                     data-bs-toggle="modal"
@@ -78,7 +78,6 @@ bootstrap.min.css">
                     <i class="bi bi-pencil-square"></i> Editar
                 </button>
                 <?php endif; ?>
-
 
 
                 <div class="card h-100 book-card shadow-sm p-3">
@@ -106,7 +105,7 @@ bootstrap.min.css">
 
                     
                 <?php if (session('rol') === 'user'): ?>
-                    <form action="<?= site_url('libreria/carrito/agregar') ?>"method="post" class="mt-auto">
+                    <form action="<?= site_url('library/carrito/agregar') ?>"method="post" class="mt-auto">
                         <?= csrf_field() ?>
                         <input type="hidden" name="id" value="<?= $libro['id'] ?>">
 

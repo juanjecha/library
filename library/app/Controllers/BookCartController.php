@@ -50,28 +50,34 @@ class BookCartController extends BaseController
             disponible (Max: ' . $libro['stock'] . ').');
         }
 
-        $carrito = $this->session->get('libro_carrito') ?? [];
+                $carrito = $this->session->get('libro_carrito') ?? [];
         $itemKey = $libro['isbn'] . '_' . str_replace(' ', '', $formato);
-        
+
         if (isset($carrito[$itemKey])) {
             $nuevaCantidad = $carrito[$itemKey]['cantidad'] + $cantidad;
             if ($nuevaCantidad > $libro['stock']) {
-                return redirect()->back()->with('error', 'No puedes agregar más unidades.
-                Supera el stock actual.');
+                return redirect()->back()->with('error', 'No puedes agregar más unidades. Supera el stock actual.');
             }
             $carrito[$itemKey]['cantidad'] = $nuevaCantidad;
-            $carrito[$itemKey]['subtotal'] = $carrito[$itemKey]['cantidad'] *
-            $carrito[$itemKey]['precio'];
+            $carrito[$itemKey]['subtotal'] = $carrito[$itemKey]['cantidad'] * $carrito[$itemKey]['precio'];
         } else {
+            // Nombres de los autores del libro, separados por coma
+            $fila = $this->authorModel
+                ->select("GROUP_CONCAT(CONCAT(author.name, ' ', author.last_name) SEPARATOR ', ') AS autores", false)
+                ->join('book_author', 'book_author.id_author = author.id')
+                ->where('book_author.book', $libro['isbn'])
+                ->first();
+
             $carrito[$itemKey] = [
-            'id' => $libro['id'],
-            'isbn' => $libro['isbn'],
-            'titulo' => $libro['titulo'],
-            'autor' => $libro['autor'],
-            'formato' => $formato,
-            'precio' => (float) $libro['precio'],
-            'cantidad' => $cantidad,
-            'subtotal' => $cantidad * (float) $libro['precio']
+                'id' => $libro['id'],
+                'isbn' => $libro['isbn'],
+                'titulo' => $libro['title'],
+                'autor' => $fila['autores'] ?: 'Sin autor',
+                'portada' => $libro['cover'],
+                'formato' => $formato,
+                'precio' => (float) $libro['price'],
+                'cantidad' => $cantidad,
+                'subtotal' => $cantidad * (float) $libro['price'],
             ];
         }
         $this->session->set('libro_carrito', $carrito);
@@ -89,13 +95,14 @@ class BookCartController extends BaseController
         }
         $data['carrito'] = $carrito;
         $data['total'] = $total;
-        return view('libreria/carrito', $data);
+        return view('library/carrito', $data);
     }
 
     /**
     * Elimina un ítem específico usando su llave en el arreglo de sesión
     */
     public function remove($itemKey) {
+        $itemKey = urldecode($itemKey);
         $carrito = $this->session->get('libro_carrito') ?? [];
         if (isset($carrito[$itemKey])) {
             unset($carrito[$itemKey]);
