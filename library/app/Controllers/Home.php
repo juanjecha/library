@@ -36,13 +36,13 @@ class Home extends BaseController
             $libros = $this->bookModel->filteredBooks($q);
             $pager = null;
             $data =  ['libros' => $libros, 'pager' => $pager];
-            return view("library/cat_filt");
+            return view("library/cat_filt", $data);
 
         } else {
             $libros = $this->bookModel->getBooks()->paginate(6);
             $pager = $this->bookModel->pager;
             $data =  ['libros' => $libros, 'pager' => $pager];
-            return view("library/catalog");
+            return view("library/catalog", $data);
 
         }
     }
