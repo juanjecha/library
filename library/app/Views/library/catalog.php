@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/
 bootstrap.min.css">
 <link rel=""stylesheet href="<?= base_url("css/books.css") ?>">
-
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
 <body>
     <header class="bg-dark text-white py-3 mb-4 shadow-sm">
@@ -21,6 +21,13 @@ bootstrap.min.css">
 
             <a href="<?= site_url('libreria/carrito') ?>" class="btn btn-primary">
                 Ver Carrito (<?= count(session()->get('libro_carrito') ?? []) ?>)
+            </a>
+
+            <a href="#" 
+                class="btn btn-primary" 
+                data-bs-toggle="modal" 
+                data-bs-target="#ModalEd">
+                Editoriales
             </a>
 
             <a href="<?= base_url('logout') ?>"class="btn btn-danger">
@@ -107,38 +114,32 @@ bootstrap.min.css">
     </div>
 
 
-    <!-- Modal de edición -->
-                <div class="modal fade" id="editAuthorModal" tabindex="-1" aria-labelledby="editAuthorTitle" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <form id="editAuthorForm" action="" method="POST">
-                                <?= csrf_field() ?>
+        <!-- Modal de edición autor-->
+                <div class="modal-body">
+                    <?= view("forms/author_edit") ?>
+                </div>
 
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="editAuthorTitle">Editar autor</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                </div>
 
-                                <div class="modal-body">
-                                    <div class="mb-3">
-                                        <label for="edit_name" class="form-label">Nombre</label>
-                                        <input type="text" class="form-control" id="edit_name" name="name" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="edit_last_name" class="form-label">Apellido</label>
-                                        <input type="text" class="form-control" id="edit_last_name" name="last_name" required>
-                                    </div>
-                                </div>
+        <!-- nueva editorial -->     
+    <div class="modal fade" id="ModalEd" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                
+                <div class="modal-header">
+                    <h5 class="modal-title" id="miModalLabel">Registro de Autores</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                
+                <div class="modal-body">
+                    <?= view("forms/editorial") ?>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="bi bi-save"></i> Guardar cambios
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+        <!-- Modal de edición autor-->
+                <div class="modal-body">
+                    <?= view("forms/editorial_edit") ?>
                 </div>
 
 
@@ -167,5 +168,48 @@ Swal.fire({
 });
 </script>
 <?php endif; ?>
+
+<script>
+    const editUrlBase = "<?= base_url('edit_aut') ?>";
+    const authorsModalEl = document.getElementById('ModalAut');
+    const editModalEl = document.getElementById('editAuthorModal');
+
+    document.querySelectorAll('.btn-edit-author').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            // Llenar el formulario de edición
+            document.getElementById('editAuthorForm').action = editUrlBase + '/' + btn.dataset.id;
+            document.getElementById('edit_name').value = btn.dataset.name;
+            document.getElementById('edit_last_name').value = btn.dataset.lastName;
+
+            // Cerrar "Autores" y, cuando termine de cerrarse, abrir "Editar"
+            authorsModalEl.addEventListener('hidden.bs.modal', function () {
+                bootstrap.Modal.getOrCreateInstance(editModalEl).show();
+            }, { once: true });
+
+            bootstrap.Modal.getInstance(authorsModalEl).hide();
+        });
+    });
+</script>
+
+<script>
+    const editUrlBase = "<?= base_url('edit_ed') ?>";
+    const EdModalEl = document.getElementById('ModalEd');
+    const editEdEl = document.getElementById('editEdModal');
+
+    document.querySelectorAll('.btn-edit-author').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            // Llenar el formulario de edición
+            document.getElementById('editEdForm').action = editUrlBase + '/' + btn.dataset.id;
+            document.getElementById('edit_name').value = btn.dataset.name;
+
+            // Cerrar "editoriales" y, cuando termine de cerrarse, abrir "Editar"
+            EdModalEl.addEventListener('hidden.bs.modal', function () {
+                bootstrap.Modal.getOrCreateInstance(editEdEl).show();
+            }, { once: true });
+
+            bootstrap.Modal.getInstance(EdModalEl).hide();
+        });
+    });
+</script>
 
 </html>

@@ -2,16 +2,20 @@
 namespace App\Controllers;
 use App\Models\BookModel;
 use App\Models\AuthorModel;
+use App\Models\EditorialModel;
 class BookCartController extends BaseController
 {
     private $session;
     private $bookModel;
     private $authorModel;
+    private $editorialModel;
+
 
     public function __construct() {
         $this->session = session();
         $this->bookModel = new BookModel();
         $this->authorModel = new AuthorModel();
+        $this->editorialModel = new EditorialModel();
     }
 
     /**
@@ -21,6 +25,7 @@ class BookCartController extends BaseController
         $perPage = 6;
         $data = [
             'authors' => $this->authorModel->findAll(), 
+            'editorials' => $this->editorialModel->findAll(),
             'libros' => $this->bookModel->paginate($perPage),
             'pager' => $this->bookModel->pager,
         ];

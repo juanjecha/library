@@ -22,7 +22,7 @@
                                         class="form-control"
                                         id="name"
                                         name="name"
-                                        placeholder="Ingresa tu nombre"
+                                        placeholder="Ej. Gabriel"
                                         required>
                                 </div>
                             </div>
@@ -43,7 +43,7 @@
                                         class="form-control"
                                         id="last_name"
                                         name="last_name"
-                                        placeholder="Ingresa tu apellido"
+                                        placeholder="Ej. García Marquez"
                                         required>
                                 </div>
                             </div>

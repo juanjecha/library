@@ -22,4 +22,10 @@ $routes->get('libreria/carrito/vaciar', [BookCartController::class, 'clear']);
 
 
 //registros
-$routes->post('save_aut', 'AuthorConTroller::new');
+$routes->post('save_aut', 'AuthorController::new');
+$routes->post('save_ed', 'EditorialController::new');
+
+
+//edits
+$routes->post('edit_aut/(:num)', 'AuthorController::update/$1');
+$routes->post('edit_ed/(:num)', 'EditorialController::update/$1');

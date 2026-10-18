@@ -26,4 +26,26 @@ class AuthorController extends BaseController
             return redirect()->back()->withInput()->with('error_author', $operation["message"]);
         }
     }
+
+    public function update($id)
+    {
+        $author = $this->request->getPost();
+
+        if (empty(trim($author['edit_name'] ?? '')) || empty(trim($author['edit_last_name'] ?? ''))) {
+            return redirect()->back()->with('error_author', 'Nombre y apellido son obligatorios');
+        }
+
+        $operation = $this->bookModel->updateAuthor((int) $id, [
+            'name' => trim($author['edit_name']),
+            'last_name' => trim($author['edit_last_name']),
+        ]);
+
+        if ($operation['status']) {
+            return redirect()->back()->with('success_author', $operation['message']);
+        }
+
+        return redirect()->back()->with('error_author', $operation['message']);
+    }
+
+
 }
