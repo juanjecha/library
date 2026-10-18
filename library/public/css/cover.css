@@ -1,19 +1,27 @@
 .book-cover-wrap {
-    height: 160px;
+    height: 180px;             /* Ajusta aquí la altura deseada (ej. 150px a 200px) */
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #f1f3f5;
-    border-radius: 6px;
     overflow: hidden;
+    background-color: #f8f9fa;  /* Fondo neutro para portadas estrechas */
+    border-radius: 6px;
 }
 
 .book-cover {
-    max-width: 110px;
     max-height: 100%;
-    object-fit: contain;
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;       /* Mantiene la proporción de la portada sin recortarla */
+    display: block;
+    margin: 0 auto;
 }
 
 .book-cover-placeholder {
-    color: #adb5bd;
+    height: 180px;             /* Misma altura que el contenedor */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6c757d;
 }
