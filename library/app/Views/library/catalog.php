@@ -13,31 +13,38 @@ bootstrap.min.css">
         <div class="container d-flex justify-content-between align-items-center">
             <h1 class="h3 mb-0">Librería Juanito</h1>
             
-            <a href="#" 
-                class="btn btn-primary" 
-                data-bs-toggle="modal" 
-                data-bs-target="#ModalBook">
-                Libros
-            </a>
+            <?php if (session('rol') === 'admin'): ?>
+            
+                <a href="#" 
+                    class="btn btn-primary" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#ModalBook">
+                    Libros
+                </a>
 
-            <a href="#" 
-                class="btn btn-primary" 
-                data-bs-toggle="modal" 
-                data-bs-target="#ModalAut">
-                Autores
-            </a>
+                <a href="#" 
+                    class="btn btn-primary" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#ModalAut">
+                    Autores
+                </a>
 
-            <a href="<?= site_url('libreria/carrito') ?>" class="btn btn-primary">
-                Ver Carrito (<?= count(session()->get('libro_carrito') ?? []) ?>)
-            </a>
+            
 
-            <a href="#" 
-                class="btn btn-primary" 
-                data-bs-toggle="modal" 
-                data-bs-target="#ModalEd">
-                Editoriales
-            </a>
+                <a href="#" 
+                    class="btn btn-primary" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#ModalEd">
+                    Editoriales
+                </a>
+            <?php endif; ?>
+            
 
+            <?php if (session('rol') === 'user'): ?>
+                <a href="<?= site_url('libreria/carrito') ?>" class="btn btn-primary">
+                    Ver Carrito (<?= count(session()->get('libro_carrito') ?? []) ?>)
+                </a>
+            <?php endif; ?>
             <a href="<?= base_url('logout') ?>"class="btn btn-danger">
                 <i class="bi bi-box-arrow-right"></i>
                 Cerrar sesión
@@ -47,7 +54,7 @@ bootstrap.min.css">
     </header>
 
     <main class="container py-2">
-        <?php if (session()->getFlashdata('error')): ?>
+        <?php if (session('rol') === 'user'): ?>
         <div class="alert alert-danger"><?= session()->getFlashdata('error') ?></div>
         <?php endif; ?>
 
@@ -55,6 +62,7 @@ bootstrap.min.css">
             <?php foreach ($libros as $libro): ?>
 
             <div class="col">
+                <?php if (session('rol') === 'user'): ?>
                 <button type="button"
                     class="btn btn-sm btn-outline-secondary w-100 mt-2"
                     data-bs-toggle="modal"
@@ -69,6 +77,7 @@ bootstrap.min.css">
                     data-cover="<?= esc($libro['cover'] ?? '', 'attr') ?>">
                     <i class="bi bi-pencil-square"></i> Editar
                 </button>
+                <?php endif; ?>
 
 
 
@@ -95,6 +104,8 @@ bootstrap.min.css">
                     <div class="book-price mb-2">$<?= number_format($libro['price'], 2) ?>
                     MXN</div>
 
+                    
+                <?php if (session('rol') === 'user'): ?>
                     <form action="<?= site_url('libreria/carrito/agregar') ?>"method="post" class="mt-auto">
                         <?= csrf_field() ?>
                         <input type="hidden" name="id" value="<?= $libro['id'] ?>">
@@ -121,6 +132,7 @@ bootstrap.min.css">
                             <?= $libro['stock'] > 0 ? 'Agregar al Carrito' : 'Agotado' ?>
                         </button>
                     </form>
+                <?php endif; ?>
                 </div>
             </div>
             <?php endforeach; ?>
@@ -204,7 +216,7 @@ bootstrap.min.css">
 
     
 
-            <!-- Modal de edición editorial-->
+            <!-- Modal de edición de libro-->
                 <div class="modal-body">
                     <?= view("forms/book_edit") ?>
                 </div>
@@ -312,6 +324,7 @@ Swal.fire({
 
 
 <!-- modal edit editorial -->
+
 <script>
     const editEdUrlBase = "<?= base_url('edit_ed') ?>";
     const edModalEl = document.getElementById('ModalEd');
@@ -329,6 +342,43 @@ Swal.fire({
             bootstrap.Modal.getInstance(edModalEl).hide();
         });
     });
+</script>
+
+<!-- modal edit editorial -->
+ <script>
+(function () {
+    const modalEl = document.getElementById('editBookModal');
+    const baseUrl = "<?= base_url('edit_book') ?>";
+    const uploadsUrl = "<?= base_url('uploads') ?>";
+
+    modalEl.addEventListener('show.bs.modal', function (event) {
+        const btn = event.relatedTarget;
+
+        document.getElementById('editBookForm').action = baseUrl + '/' + btn.dataset.id;
+        document.getElementById('edit_book_isbn').value = btn.dataset.isbn;
+        document.getElementById('edit_book_title').value = btn.dataset.title;
+        document.getElementById('edit_book_price').value = btn.dataset.price;
+        document.getElementById('edit_book_stock').value = btn.dataset.stock;
+        document.getElementById('edit_book_editorial').value = btn.dataset.editorial;
+
+        // Autores: desmarcar todos y marcar los del libro
+        modalEl.querySelectorAll('.edit-author-check').forEach(function (c) { c.checked = false; });
+        (btn.dataset.authors || '').split(',').filter(Boolean).forEach(function (id) {
+            const check = document.getElementById('edit_author_' + id);
+            if (check) check.checked = true;
+        });
+
+        // Portada actual
+        const preview = document.getElementById('edit_book_cover_preview');
+        document.getElementById('edit_book_cover').value = '';
+        if (btn.dataset.cover) {
+            preview.src = uploadsUrl + '/' + btn.dataset.cover;
+            preview.classList.remove('d-none');
+        } else {
+            preview.classList.add('d-none');
+        }
+    });
+})();
 </script>
 
 

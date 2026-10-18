@@ -24,12 +24,7 @@
                     </div>
 
                     <div class="row">
-                        <!-- ISBN (solo lectura) -->
-                        <div class="col-md-5 mb-3">
-                            <label for="edit_book_isbn" class="form-label">ISBN</label>
-                            <input type="text" class="form-control" id="edit_book_isbn" readonly>
-                            <div class="form-text">El ISBN no se puede modificar.</div>
-                        </div>
+                        
 
                         <!-- Título -->
                         <div class="col-md-7 mb-3">

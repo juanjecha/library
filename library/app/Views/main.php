@@ -1,41 +1,68 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bootstrap Navbar</title>
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="<?= base_url('css/navbar.css') ?>">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/
+bootstrap.min.css">
+<link rel="stylesheet" href="<?= base_url("css/books.css") ?>">
+<link rel="stylesheet" href="<?= base_url("css/cover.css") ?>">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
 <body>
+    <header class="bg-dark text-white py-3 mb-4 shadow-sm">
+        <div class="container d-flex justify-content-between align-items-center">
+            <h1 class="h3 mb-0">Librería Juanito</h1>
+            
+            <a   href="<?= base_url("/login") ?>" class="btn btn-success">
+                <i class="bi bi-box-arrow-in-right"></i> Iniciar sesión
+            </a>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
-        <div class="container">
-            <a class="navbar-brand" href="#">Librería Juanito</a>
+        </div>
+    </header>
 
-            <button class="navbar-toggler" type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarContent">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+    <main class="container py-2">
+        <?php if (session()->getFlashdata('error')): ?>
+        <div class="alert alert-danger"><?= session()->getFlashdata('error') ?></div>
+        <?php endif; ?>
 
-            <div class="collapse navbar-collapse" id="navbarContent">
-                <div class="ms-auto">
-                    <a href="<?= base_url("login") ?>" class="btn btn-light">
-                        <i class="bi bi-box-arrow-in-right me-2"></i>
-                        Iniciar sesión
-                    </a>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-5">
+            <?php foreach ($libros as $libro): ?>
+
+            <div class="col">
+
+
+
+
+                <div class="card h-100 book-card shadow-sm p-3">
+                    <div class="book-cover-wrap mb-3">
+                        <?php if (! empty($libro['cover'])): ?>
+                            <img src="<?= base_url('uploads/' . esc($libro['cover'], 'url')) ?>"
+                                alt="Portada de <?= esc($libro['title'] ?? $libro['titulo'], 'attr') ?>"
+                                class="book-cover"
+                                loading="lazy">
+                        <?php else: ?>
+                            <div class="book-cover-placeholder">
+                                <i class="bi bi-book fs-1"></i>
+                            </div>
+                        <?php endif; ?>
+                    </div>   
+
+                    <span class="badge isbn-badge w-auto me-auto mb-2">ISBN: <?=
+                    esc($libro['isbn']) ?></span>
+
+                    <h2 class="book-title"><?= esc($libro['title']) ?></h2>
+                    <p class="text-muted small">Editorial: <?= esc($libro["editorial"]) ?></p>
+                    
+                    <div class="book-price mb-2">$<?= number_format($libro['price'], 2) ?>
+                    MXN</div>
                 </div>
             </div>
+            <?php endforeach; ?>
+
         </div>
-    </nav>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-</body>
+        <div class="d-flex justify-content-center pagination-container">
+            <?= $pager->links('default', 'bootstrap_pagination') ?>
+        </div>
+    </main>
 </html>
