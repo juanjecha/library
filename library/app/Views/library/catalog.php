@@ -54,7 +54,7 @@ bootstrap.min.css">
     </header>
 
     <!-- Búsqueda personalizada -->
-<form action="<?= base_url('search') ?>" method="get" class="card shadow-sm p-3 mb-4">
+<form action="<?= base_url('search') ?>" method="POST" class="card shadow-sm p-3 mb-4">
     <div class="row g-2 align-items-end">
 
         <div class="col-12 col-lg-4">
@@ -108,6 +108,10 @@ bootstrap.min.css">
 
                 <div class="card h-100 book-card shadow-sm p-3">
                     <div class="book-cover-wrap mb-3">
+                        <?php if (empty($libros)): ?>
+                            <div class="alert alert-info">No se encontraron libros con esa búsqueda.</div>
+                        <?php endif; ?>
+
                         <?php if (! empty($libro['cover'])): ?>
                             <img src="<?= base_url('uploads/' . esc($libro['cover'], 'url')) ?>"
                                 alt="Portada de <?= esc($libro['title'] ?? $libro['titulo'], 'attr') ?>"
@@ -164,9 +168,13 @@ bootstrap.min.css">
 
         </div>
 
-        <div class="d-flex justify-content-center pagination-container">
-            <?= $pager->links('default', 'bootstrap_pagination') ?>
-        </div>
+
+
+        <?php if (! empty($pager)): ?>
+            <div class="d-flex justify-content-center pagination-container">
+                <?= $pager->links('default', 'bootstrap_pagination') ?>
+            </div>
+        <?php endif; ?>
     </main>
 
 
