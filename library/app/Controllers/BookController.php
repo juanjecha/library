@@ -83,7 +83,7 @@ class BookController extends BaseController
         $this->bookModel->insert([
             'isbn' => trim($isbn),
             'title' => trim($this->request->getPost('title')),
-            'id_editorial' => $this->request->getPost('id_editorial'),
+            'id_editorial' => $this->request->getPost('editorial_id'),
             'price' => $this->request->getPost('price'),
             'stock' => $this->request->getPost('stock'),
             'cover' => $coverName,

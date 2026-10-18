@@ -5,7 +5,7 @@ class BookModel extends Model{
     protected $table = 'book';
     protected $primaryKey = 'id';
     protected $allowedFields = ['isbn', 'title', 'price', 'stock', 'id_editorial', 'cover'];
-    protected $useTimestamps = true;
+    protected $useTimestamps = false;
 
     public function duplicate_check(string $title, int $editorial, ?int $excludeId = null)
     {
