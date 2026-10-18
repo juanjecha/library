@@ -58,9 +58,12 @@ class BookModel extends Model{
     }
 
     public function getBooks() {
-        $builder = $this->select('book.id, book.isbn, book.title, book.price, book.stock, editorial.name AS editorial, book.cover')
-                        ->join('editorial', 'book.id_editorial = editorial.id', 'inner')
-                        ;
-        return $builder;
-    }
+    return $this->select(
+            'book.id, book.isbn, book.title, book.price, book.stock, book.cover, book.id_editorial,
+             editorial.name AS editorial,
+             (SELECT GROUP_CONCAT(ba.id_author) FROM book_author ba WHERE ba.book = book.isbn) AS author_ids',
+            false
+        )
+        ->join('editorial', 'book.id_editorial = editorial.id', 'inner');
+}
 }

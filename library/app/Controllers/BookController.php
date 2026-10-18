@@ -105,4 +105,102 @@ class BookController extends BaseController
 
         return redirect()->back()->with('success_book', 'Libro registrado exitosamente.');
     }
+
+    public function update($id)
+{
+    $book = $this->bookModel->find($id);
+    if (! $book) {
+        return redirect()->back()->with('error_book', 'El libro no existe.');
+    }
+
+    $rules = [
+        'title' => 'required|max_length[200]',
+        'author_ids' => 'required',
+        'author_ids.*' => 'is_natural_no_zero|is_not_unique[author.id]',
+        'editorial_id' => 'required|is_not_unique[editorial.id]',
+        'price' => 'required|numeric|greater_than[0]',
+        'stock' => 'required|is_natural',
+    ];
+
+    $messages = [
+        'title' => ['required' => 'El título es obligatorio.'],
+        'author_ids' => ['required' => 'Selecciona al menos un autor.'],
+        'editorial_id' => ['required' => 'Selecciona una editorial.'],
+        'price' => [
+            'required' => 'El precio es obligatorio.',
+            'greater_than' => 'El precio debe ser mayor a 0.',
+        ],
+        'stock' => ['required' => 'El stock es obligatorio.'],
+    ];
+
+    // La portada es opcional al editar: se valida solo si se envió un archivo nuevo
+    $file = $this->request->getFile('cover');
+    $hasNewCover = $file !== null && $file->getError() !== UPLOAD_ERR_NO_FILE;
+
+    if ($hasNewCover) {
+        $rules['cover'] = 'is_image[cover]|mime_in[cover,image/jpg,image/jpeg,image/png,image/webp]|max_size[cover,2048]';
+        $messages['cover'] = [
+            'is_image' => 'El archivo debe ser una imagen.',
+            'mime_in' => 'La portada debe ser JPG, PNG o WEBP.',
+            'max_size' => 'La portada no puede pesar más de 2 MB.',
+        ];
+    }
+
+    if (! $this->validate($rules, $messages)) {
+        return redirect()->back()
+            ->with('error_book', implode(' ', $this->validator->getErrors()));
+    }
+
+    // Portada: la nueva o la que ya tenía
+    $coverName = $book['cover'];
+    if ($hasNewCover) {
+        $coverName = $file->getRandomName();
+        $file->move(FCPATH . 'uploads', $coverName);
+    }
+
+    $isbn = $book['isbn'];  // el ISBN no cambia
+    $authorIds = array_unique((array) $this->request->getPost('author_ids'));
+
+    $db = \Config\Database::connect();
+    $db->transStart();
+
+    $result = $this->bookModel->updateBook((int) $id, [
+        'isbn' => $isbn,
+        'title' => trim($this->request->getPost('title')),
+        'price' => $this->request->getPost('price'),
+        'stock' => $this->request->getPost('stock'),
+        'id_editorial' => (int) $this->request->getPost('editorial_id'),
+        'cover' => $coverName,
+    ]);
+
+    if ($result['status']) {
+        // Reemplazar los autores del libro
+        $this->bookAuthorModel->where('book', $isbn)->delete();
+
+        $rows = [];
+        foreach ($authorIds as $authorId) {
+            $rows[] = ['book' => $isbn, 'id_author' => (int) $authorId];
+        }
+        $this->bookAuthorModel->insertBatch($rows);
+    }
+
+    $db->transComplete();
+
+    if (! $result['status'] || ! $db->transStatus()) {
+        if ($hasNewCover) {
+            @unlink(FCPATH . 'uploads/' . $coverName);  // no dejar archivos huérfanos
+        }
+        return redirect()->back()->with(
+            'error_book',
+            $result['status'] ? 'No se pudo actualizar el libro.' : $result['message']
+        );
+    }
+
+    // Todo salió bien: borrar la portada anterior si se reemplazó
+    if ($hasNewCover && ! empty($book['cover'])) {
+        @unlink(FCPATH . 'uploads/' . $book['cover']);
+    }
+
+    return redirect()->back()->with('success_book', $result['message']);
+}
 }

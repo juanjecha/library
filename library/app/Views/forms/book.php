@@ -46,7 +46,7 @@
 
             <!-- Autores (checklist) -->
             <div class="col-md-6 mb-3">
-                <label class="form-label d-block">Autores</label>
+                <label class="form-label mb-1">Autores</label>
 
                 <?php $selected = (array) old('author_ids'); ?>
 
@@ -78,6 +78,16 @@
                         <?php endforeach; ?>
                     </div>
                     <div class="form-text">Marca uno o más autores.</div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <label class="form-label mb-0">Autores</label>
+                        <button type="button" class="btn btn-sm btn-outline-success"
+                            data-bs-target="#ModalAut"
+                            data-bs-toggle="modal"
+                            data-bs-dismiss="modal">
+                            <i class="bi bi-person-plus-fill"></i> Registrar nuevo autor
+                        </button>
+                    </div>
                 <?php endif; ?>
             </div>
 
@@ -96,8 +106,27 @@
                                     <?= old('editorial_id') == $editorial['id'] ? 'selected' : '' ?>>
                                     <?= esc($editorial['name']) ?>
                                 </option>
+
+                                <button type="button"
+                                    class="btn btn-sm btn-outline-primary btn-edit-author"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#editAuthorModal"
+                                    data-id="<?= esc($editorial['id'], 'attr') ?>"
+                                    data-name="<?= esc($editorial['name'], 'attr') ?>">
+                                    <i class="bi bi-pencil-square"></i> Editar
+                                </button>
                             <?php endforeach; ?>
                         </select>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <label for="editorial_id" class="form-label mb-0">Editorial</label>
+                        <button type="button" class="btn btn-sm btn-outline-success"
+                            data-bs-target="#ModalEd"
+                            data-bs-toggle="modal"
+                            data-bs-dismiss="modal">
+                            <i class="bi bi-building-add"></i> Registrar nueva editorial
+                        </button>
                     </div>
                     <?php if (empty($editorials)): ?>
                         <div class="form-text text-danger">Primero registra al menos una editorial.</div>

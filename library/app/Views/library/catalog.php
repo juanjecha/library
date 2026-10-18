@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/
 bootstrap.min.css">
-<link rel=""stylesheet href="<?= base_url("css/books.css") ?>">
-<link rel=""stylesheet href="<?= base_url("css/cover.css") ?>">
+<link rel="stylesheet" href="<?= base_url("css/books.css") ?>">
+<link rel="stylesheet" href="<?= base_url("css/cover.css") ?>">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
 <body>
@@ -55,21 +55,36 @@ bootstrap.min.css">
             <?php foreach ($libros as $libro): ?>
 
             <div class="col">
-                
-                    <div class="card h-100 book-card shadow-sm p-3">
-                        <div class="book-cover-wrap mb-3">
-                            <?php if (! empty($libro['cover'])): ?>
-                                <img src="<?= base_url('uploads/' . esc($libro['cover'], 'url')) ?>"
-                                    alt="Portada de <?= esc($libro['title'] ?? $libro['titulo'], 'attr') ?>"
-                                    class="book-cover"
-                                    loading="lazy">
-                            <?php else: ?>
-                                <div class="book-cover-placeholder">
-                                    <i class="bi bi-book fs-1"></i>
-                                </div>
-                            <?php endif; ?>
-                        </div>
-                    </div>    
+                <button type="button"
+                    class="btn btn-sm btn-outline-secondary w-100 mt-2"
+                    data-bs-toggle="modal"
+                    data-bs-target="#editBookModal"
+                    data-id="<?= esc($libro['id'], 'attr') ?>"
+                    data-isbn="<?= esc($libro['isbn'], 'attr') ?>"
+                    data-title="<?= esc($libro['title'], 'attr') ?>"
+                    data-price="<?= esc($libro['price'], 'attr') ?>"
+                    data-stock="<?= esc($libro['stock'], 'attr') ?>"
+                    data-editorial="<?= esc($libro['id_editorial'], 'attr') ?>"
+                    data-authors="<?= esc($libro['author_ids'] ?? '', 'attr') ?>"
+                    data-cover="<?= esc($libro['cover'] ?? '', 'attr') ?>">
+                    <i class="bi bi-pencil-square"></i> Editar
+                </button>
+
+
+
+                <div class="card h-100 book-card shadow-sm p-3">
+                    <div class="book-cover-wrap mb-3">
+                        <?php if (! empty($libro['cover'])): ?>
+                            <img src="<?= base_url('uploads/' . esc($libro['cover'], 'url')) ?>"
+                                alt="Portada de <?= esc($libro['title'] ?? $libro['titulo'], 'attr') ?>"
+                                class="book-cover"
+                                loading="lazy">
+                        <?php else: ?>
+                            <div class="book-cover-placeholder">
+                                <i class="bi bi-book fs-1"></i>
+                            </div>
+                        <?php endif; ?>
+                    </div>   
 
                     <span class="badge isbn-badge w-auto me-auto mb-2">ISBN: <?=
                     esc($libro['isbn']) ?></span>
@@ -151,7 +166,7 @@ bootstrap.min.css">
             <div class="modal-content">
                 
                 <div class="modal-header">
-                    <h5 class="modal-title" id="miModalLabel">Registro de Autores</h5>
+                    <h5 class="modal-title" id="miModalLabel">Registro de Editoriales</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 
@@ -162,7 +177,7 @@ bootstrap.min.css">
         </div>
     </div>
 
-        <!-- Modal de edición autor-->
+        <!-- Modal de edición editorial-->
                 <div class="modal-body">
                     <?= view("forms/editorial_edit") ?>
                 </div>
@@ -186,6 +201,13 @@ bootstrap.min.css">
             </div>
         </div>
     </div>
+
+    
+
+            <!-- Modal de edición editorial-->
+                <div class="modal-body">
+                    <?= view("forms/book_edit") ?>
+                </div>
 
 
 </body>
@@ -264,6 +286,7 @@ Swal.fire({
 <?php endif; ?>
 
 
+<!-- modal edit author -->
 
 <script>
     const editUrlBase = "<?= base_url('edit_aut') ?>";
@@ -287,6 +310,8 @@ Swal.fire({
     });
 </script>
 
+
+<!-- modal edit editorial -->
 <script>
     const editEdUrlBase = "<?= base_url('edit_ed') ?>";
     const edModalEl = document.getElementById('ModalEd');
@@ -305,5 +330,7 @@ Swal.fire({
         });
     });
 </script>
+
+
 
 </html>

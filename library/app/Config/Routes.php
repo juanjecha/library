@@ -30,3 +30,4 @@ $routes->post('save_book', 'BookController::new');
 //edits
 $routes->post('edit_aut/(:num)', 'AuthorController::update/$1');
 $routes->post('edit_ed/(:num)', 'EditorialController::update/$1');
+$routes->post('edit_book/(:num)', 'BookController::update/$1');
