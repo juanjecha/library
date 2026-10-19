@@ -30,12 +30,12 @@ class Home extends BaseController
     }
 
     public function filt() {
-        //$q = trim((string) $this->request->getPost('q'));
-        $q = trim((string) $this->request->getGet('q'));
+        $q = trim((string) $this->request->getPost('q'));
+        //$q = trim((string) $this->request->getGet('q'));
 
 
 
-        if ($q !== '') {
+        if ($q !== null) {
             $libros = $this->bookModel->filteredBooks($q);
             $pager = null;
             $data =  ['libros' => $libros, 'pager' => $pager,
