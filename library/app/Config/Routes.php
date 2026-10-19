@@ -32,4 +32,4 @@ $routes->get('libreria/carrito/vaciar', [BookCartController::class, 'clear']);
     $routes->post('edit_book/(:num)', 'BookController::update/$1');
 
 
-$routes->post('search', 'Home::filt');
+$routes->get('search', 'Home::filt');

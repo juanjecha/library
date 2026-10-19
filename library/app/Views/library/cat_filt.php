@@ -57,7 +57,7 @@ bootstrap.min.css">
     </header>
 
     <!-- Búsqueda personalizada -->
-<form action="<?= base_url('search') ?>" method="POST" class="card shadow-sm p-3 mb-4">
+<form action="<?= site_url('search') ?>" method="GET" class="card shadow-sm p-3 mb-4">
     <div class="row g-2 align-items-end">
 
         <div class="col-12 col-lg-4">

@@ -30,8 +30,8 @@ class Home extends BaseController
     }
 
     public function filt() {
-        $q = trim((string) $this->request->getPost('q'));
-
+        //$q = trim((string) $this->request->getPost('q'));
+        $q = trim((string) $this->request->getGet('q'));
 
 
 
