@@ -27,7 +27,7 @@
                         
 
                         <!-- Título -->
-                        <div class="col-md-7 mb-3">
+                        <div class="col-12 mb-3">
                             <label for="edit_book_title" class="form-label">Título</label>
                             <input type="text" class="form-control" id="edit_book_title" name="title"
                                 maxlength="200" required>

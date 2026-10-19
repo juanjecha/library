@@ -1,7 +1,7 @@
 <div class="modal fade" id="editAuthorModal" tabindex="-1" aria-labelledby="editAuthorTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content"><?= csrf_field() ?>
-            <form id="editEdForm" action="<?= base_url("edit_aut") ?>" method="POST">
+            <form id="editAuthorForm" action="<?= base_url("edit_aut") ?>" method="POST">
 
                 <!-- Campo nombre -->
                 <div class="mb-3">

@@ -393,7 +393,7 @@ Swal.fire({
         const btn = event.relatedTarget;
 
         document.getElementById('editBookForm').action = baseUrl + '/' + btn.dataset.id;
-        document.getElementById('edit_book_isbn').value = btn.dataset.isbn;
+        
         document.getElementById('edit_book_title').value = btn.dataset.title;
         document.getElementById('edit_book_price').value = btn.dataset.price;
         document.getElementById('edit_book_stock').value = btn.dataset.stock;
