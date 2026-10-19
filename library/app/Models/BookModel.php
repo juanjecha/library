@@ -92,7 +92,8 @@ class BookModel extends Model{
                                                                         )
                   ";
 
-        return $this->query($query, ["q" => "%" . $q . "%"])->getResultArray();
+        $like = '%' . addcslashes($q, '%_\\') . '%';
+        return $this->query($query, ['q' => $like])->getResultArray();
     }
 
 }

@@ -31,17 +31,24 @@ class Home extends BaseController
 
     public function filt() {
         $q = trim((string) $this->request->getPost('q'));
-        
+
+
+
+
         if ($q !== '') {
             $libros = $this->bookModel->filteredBooks($q);
             $pager = null;
-            $data =  ['libros' => $libros, 'pager' => $pager];
+            $data =  ['libros' => $libros, 'pager' => $pager,
+                'authors' => $this->authorModel->findAll(),
+                'editorials' => $this->editorialModel->findAll()];
             return view("library/cat_filt", $data);
 
         } else {
             $libros = $this->bookModel->getBooks()->paginate(6);
             $pager = $this->bookModel->pager;
-            $data =  ['libros' => $libros, 'pager' => $pager];
+            $data =  ['libros' => $libros, 'pager' => $pager,
+                'authors' => $this->authorModel->findAll(),
+                'editorials' => $this->editorialModel->findAll()];
             return view("library/catalog", $data);
 
         }

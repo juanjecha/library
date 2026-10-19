@@ -7,6 +7,9 @@ bootstrap.min.css">
 <link rel="stylesheet" href="<?= base_url("css/books.css") ?>">
 <link rel="stylesheet" href="<?= base_url("css/cover.css") ?>">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+<script src="<?= base_url('js/inactividad.js') ?>"
+        data-logout-url="<?= site_url('logout') ?>"
+        data-minutes="10"></script>
 </head>
 <body>
     <header class="bg-dark text-white py-3 mb-4 shadow-sm">
@@ -62,8 +65,8 @@ bootstrap.min.css">
             <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-search"></i></span>
                 <input type="search" class="form-control" id="q" name="q"
-                    placeholder="Título, ISBN, autor o editorial"
-                    value="<?= esc($filters['q'] ?? '', 'attr') ?>">
+                    placeholder="Título, autor o editorial"
+                    value="<?= esc($q ?? '', 'attr') ?>">
             </div>
         </div>
 
@@ -84,6 +87,10 @@ bootstrap.min.css">
         <?php endif; ?>
 
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-5">
+            <?php if (empty($libros)): ?>
+                <div class="alert alert-info">No se encontraron libros con esa búsqueda.</div>
+            <?php endif; ?>
+
             <?php foreach ($libros as $libro): ?>
 
             <div class="col">
@@ -108,9 +115,7 @@ bootstrap.min.css">
 
                 <div class="card h-100 book-card shadow-sm p-3">
                     <div class="book-cover-wrap mb-3">
-                        <?php if (empty($libros)): ?>
-                            <div class="alert alert-info">No se encontraron libros con esa búsqueda.</div>
-                        <?php endif; ?>
+                        
 
                         <?php if (! empty($libro['cover'])): ?>
                             <img src="<?= base_url('uploads/' . esc($libro['cover'], 'url')) ?>"

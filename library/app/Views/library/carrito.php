@@ -7,6 +7,9 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="<?= base_url('css/books.css') ?>">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+<script src="<?= base_url('js/inactividad.js') ?>"
+        data-logout-url="<?= site_url('logout') ?>"
+        data-minutes="10"></script>
 </head>
 <body>
     <header class="bg-dark text-white py-3 mb-4 shadow-sm">
